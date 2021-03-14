@@ -7,8 +7,8 @@
 export const omit = (obj, ...fields) => {
   const newObj = {};
   for (const [key, value] of Object.entries(obj)) {
-    const fieldsFind = fields.find((item) => item === key);
-    if (!fieldsFind) {
+    const fieldsIncludes = fields.includes(key);
+    if (!fieldsIncludes) {
       newObj[key] = value;
     }
   }

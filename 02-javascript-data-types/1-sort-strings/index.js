@@ -14,8 +14,12 @@ export function sortStrings(arr, param = "asc") {
   });
 
   if (param === "desc") {
-    return newArr.reverse();
-  }
+    return newArr.sort(function(a,b){
+      return b.localeCompare(a, ["ru", "en"], {
+        caseFirst: "upper",
+      });
+  });
+}
 
   return newArr;
 }
