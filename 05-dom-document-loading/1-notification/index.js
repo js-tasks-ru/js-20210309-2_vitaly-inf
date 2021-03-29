@@ -1,5 +1,5 @@
 export default class NotificationMessage {
-  static displayNotification; = [];
+  static displayNotification;
 
   constructor(string = '', { duration = 0, type = '' }) {
       this.string = string;
