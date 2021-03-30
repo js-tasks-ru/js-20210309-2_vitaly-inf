@@ -1,5 +1,5 @@
 export default class NotificationMessage {
-  static displayNotification;
+  static currentNotification;
 
   constructor(string = "", { duration = 0, type = "" } = {}) {
     this.string = string;
@@ -10,8 +10,8 @@ export default class NotificationMessage {
   }
 
   method() {
-    if (NotificationMessage.displayNotification) {
-      NotificationMessage.displayNotification.remove();
+    if (NotificationMessage.currentNotification) {
+      NotificationMessage.currentNotification.remove();
     }
   }
   get template() {
@@ -35,9 +35,9 @@ export default class NotificationMessage {
 
     this.element = element.firstElementChild;
 
-    NotificationMessage.displayNotification = this.element;
+    NotificationMessage.currentNotification = this.element;
 
-    return NotificationMessage.displayNotification;
+    return NotificationMessage.currentNotification;
   }
 
   remove() {
