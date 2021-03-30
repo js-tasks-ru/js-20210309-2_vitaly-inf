@@ -1,20 +1,23 @@
 export default class NotificationMessage {
-  static displayNotification; = [];
+  static displayNotification;
 
-  constructor(string = '', { duration = 0, type = '' }) {
-      this.string = string;
-      this.duration = duration;
-      this.type = type;
+  constructor(string = "", { duration = 0, type = "" } = {}) {
+    this.string = string;
+    this.duration = duration;
+    this.type = type;
+    this.method();
+    this.render();
   }
-  show(sub = document.body) {
-      if (NotificationMessage.displayNotification) {
-          NotificationMessage.displayNotification.remove();
-      }
-      sub.append(this.render());
-      setTimeout(() => this.destroy(), this.duration);
+
+  method() {
+    if (NotificationMessage.displayNotification) {
+      NotificationMessage.displayNotification.remove();
+    }
   }
   get template() {
-      return `<div class="notification ${this.type}" style="--value:${this.duration / 1000}s">
+    return `<div class="notification ${this.type}" style="--value:${
+      this.duration / 1000
+    }s">
       <div class="timer"></div>
       <div class="inner-wrapper">
         <div class="notification-header">${this.type}</div>
@@ -24,17 +27,28 @@ export default class NotificationMessage {
       </div>
     </div>`;
   }
-  render() {
-      this.element = document.createElement('div');
-      this.element.innerHTML = this.template;
-      NotificationMessage.displayNotification = this.element;
 
-      return NotificationMessage.displayNotification;
+  render() {
+    const element = document.createElement("div");
+
+    element.innerHTML = this.template;
+
+    this.element = element.firstElementChild;
+
+    NotificationMessage.displayNotification = this.element;
+
+    return NotificationMessage.displayNotification;
   }
+
   remove() {
-      this.element.remove();
+    this.element.remove();
   }
   destroy() {
-      this.remove();
+    this.remove();
+  }
+
+  show(sub = document.body) {
+    sub.append(this.element);
+    setTimeout(() => this.destroy(), this.duration);
   }
 }
