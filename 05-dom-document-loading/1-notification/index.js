@@ -1,6 +1,5 @@
 export default class NotificationMessage {
   static currentNotification;
-
   constructor(string = "", { duration = 0, type = "" } = {}) {
     this.string = string;
     this.duration = duration;
@@ -8,7 +7,6 @@ export default class NotificationMessage {
     this.method();
     this.render();
   }
-
   method() {
     if (NotificationMessage.currentNotification) {
       NotificationMessage.currentNotification.remove();
@@ -27,26 +25,19 @@ export default class NotificationMessage {
       </div>
     </div>`;
   }
-
   render() {
     const element = document.createElement("div");
-
     element.innerHTML = this.template;
-
     this.element = element.firstElementChild;
-
     NotificationMessage.currentNotification = this.element;
-
     return NotificationMessage.currentNotification;
   }
-
   remove() {
     this.element.remove();
   }
   destroy() {
     this.remove();
   }
-
   show(sub = document.body) {
     sub.append(this.element);
     setTimeout(() => this.destroy(), this.duration);
