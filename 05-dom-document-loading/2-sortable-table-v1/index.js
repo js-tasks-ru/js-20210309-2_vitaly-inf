@@ -2,7 +2,7 @@ export default class SortableTable {
   element;
   subElements = {};
 
-  constructor(header = [], { data = [] } = {}) {
+  constructor(header = [], { data = [] } = {}, ) {
     this.header = header;
     this.data = data;
     this.render();
@@ -76,7 +76,7 @@ export default class SortableTable {
   sort(field, order) {
     const allColumns = this.element.querySelectorAll('.sortable-table__cell[data-id]');
     const currentColumn = this.element.querySelector(`.sortable-table__cell[data-id="${field}"]`);
-
+    console.log('allColumns', allColumns);
     
     allColumns.forEach(column => {
       column.dataset.order = '';

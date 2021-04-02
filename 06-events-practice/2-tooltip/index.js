@@ -4,12 +4,14 @@ class Tooltip {
         if(!allData){
             return;
         }    
-        this.element.innerText = allData.dataset.tooltip;
+
+        this.element.innerHTML = allData.dataset.tooltip;
         
         this.element.style.left = event.pageX + 10 + 'px';
         this.element.style.top = event.pageY + 10 + 'px';
 
         document.body.append(this.element);
+
     }
     hidden = () =>{
         this.destroy();
@@ -17,17 +19,15 @@ class Tooltip {
     constructor(){
         this.render();
     }
-    getTemplate(){
-      return `<div class="tooltip">This is tooltip</div>`; 
-    }
-    render(){
-        const element = document.createElement('div');
-        element.innerHTML = this.getTemplate();
-        this.element = element.firstElementChild;
+
+    render(q = ''){
+        this.element = document.createElement('div');
+        this.element.classList.add('tooltip');
+        this.element.innerHTML = q;
+        document.body.append(this.element);
     }
     initialize (){
         this.initEventListener();
-        
     }    
     initEventListener(){
        
@@ -45,9 +45,11 @@ class Tooltip {
     }
     remove(){
         this.element.remove();
+        
     }
     destroy(){
         this.remove();
+
     }
 }
 const tooltip = new Tooltip();
