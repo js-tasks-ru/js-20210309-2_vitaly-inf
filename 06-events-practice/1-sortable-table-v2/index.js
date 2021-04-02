@@ -1,9 +1,14 @@
 export default class SortableTable {
   element;
   subElement = {};
-  constructor(header = [], { data } = {}) {
+  constructor(header = [], { data } = {}, {
+    defaultValue,
+    defaultOrder 
+  } ={}) {
     this.header = header;
     this.data = data;
+    this.defaultOrder = defaultOrder;
+    this.defaultValue = defaultValue;
     this.render();
     this.sort();
   }
@@ -61,7 +66,7 @@ export default class SortableTable {
     const element = document.createElement("div");
     element.innerHTML = this.template;
     this.element = element.firstElementChild;
-    this.getSubElements(this.element);
+    this.subElement = this.getSubElements(this.element);
   }
 
   getSubElements(element) {
@@ -75,21 +80,53 @@ export default class SortableTable {
     return obj;
   }
 
-  sort(arr, param){
-    const headers = this.getSubElements(this.element).header;
+  getColumn(event){
     
-    headers.addEventListener('click', (event) => {
-      this.sortResult();
+    const arr = [...this.data];
+
+    const field = event.target.closest('[data-id]');
+    if (field.dataset.sortable === 'false') {
+      return;
+    }
+    const order = field.dataset.order;
+    const fieldSort  = field.dataset.id;
+    
+    const abc = this.header.find(item => item.id===field.dataset.id);
+    const {sortType} = abc;
+    
+    const directions = {
+      'asc': 1,
+      'desc': -1
+    }
+    const direction = directions[order];
+    
+    
+    const finder =  order === 'asc' ? 'desc' : (order === 'desc' ? 'asc': '');
+    console.log(finder);
+  
+
+    return arr.sort((a, b) => {
+      switch (sortType) {
+      case 'number':
+        return direction * (a[fieldSort] - b[fieldSort]);
+      case 'string':
+        return direction * a[fieldSort].localeCompare(b[fieldSort], ['ru', 'en']);
+      default:
+        return direction * (a[fieldSort] - b[fieldSort]);
+      }
     });
-        
+    
+  }
+  sort(arr, param){
+    
+      const a = this.getSubElements(this.element).header;
+      a.addEventListener('click', (event) => {
+        this.getColumn(event);
+      });
+    //this.subElements.body.innerHTML = this.getBody(this.sortData());
   }
   sortResult(){
     this.sort(arr,param);
-    this.sortData();
   } 
   
-
-  
-
-
 }

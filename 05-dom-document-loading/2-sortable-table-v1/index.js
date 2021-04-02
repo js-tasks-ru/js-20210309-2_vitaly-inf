@@ -76,7 +76,6 @@ export default class SortableTable {
   sort(field, order) {
     const allColumns = this.element.querySelectorAll('.sortable-table__cell[data-id]');
     const currentColumn = this.element.querySelector(`.sortable-table__cell[data-id="${field}"]`);
-    console.log('allColumns', allColumns);
     
     allColumns.forEach(column => {
       column.dataset.order = '';
@@ -90,6 +89,7 @@ export default class SortableTable {
   sortData(field, order) {
     const arr = [...this.data];
     const column = this.header.find(item => item.id === field);
+    console.log(field);
     const { sortType } = column;
     const directions = {
       asc: 1,
