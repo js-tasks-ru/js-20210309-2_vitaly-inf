@@ -1,24 +1,19 @@
 class Tooltip {
   static instance;
-
-  show = (event) => {
-    const allData = event.target.closest("[data-tooltip]");
-
-    if (!allData) {
+  onPointerOver = (event) => {
+    const element = event.target.closest("[data-tooltip]");
+    if (!element) {
       return;
     }
-
-    if (this.element) {
-      this.element.remove();
-    }
-    this.render();
-    this.element.innerHTML = allData.dataset.tooltip;
-    this.element.style.left = event.pageX + 10 + "px";
-    this.element.style.top = event.pageY + 10 + "px";
+    this.render(element.dataset.tooltip);
+    this.moveTooltip(event);
+    document.body.addEventListener('pointermove', this.onPointerMove);
   };
-
-  hidden = () => {
-    this.destroy();
+  onPointerMove = (event) =>{
+     this.moveTooltip(event);
+  };
+  onPointerOut = () => {
+      this.removeToolTip();
   };
   constructor() {
     if (Tooltip.instance) {
@@ -26,27 +21,41 @@ class Tooltip {
     }
     return Tooltip.instance;
   }
-
-  render(q = "") {
-    const element = document.createElement("div");
-    element.classList.add("tooltip");
-    element.innerHTML = q;
-    document.body.append(element);
-    this.element = element;
+  initEventListener() {
+    document.body.addEventListener("pointerover", this.onPointerOver);
+    document.body.addEventListener("pointerout", this.onPointerOut);
   }
+
   initialize() {
     this.initEventListener();
   }
-  initEventListener() {
-    document.body.addEventListener("pointerover", this.show);
-    document.body.addEventListener("pointermove", this.show);
-    document.body.addEventListener("pointerout", this.hidden);
+
+  render(html = "") {
+    const element = document.createElement("div");
+    element.classList.add("tooltip");
+    element.innerHTML = html;
+    this.element = element;
+    document.body.append(element);
   }
-  remove() {
-    this.element.remove();
+  
+  moveTooltip(event){
+      const shift = 10;
+      this.element.style.left = event.pageX + shift + "px";
+      this.element.style.top = event.pageY + shift + "px";
+  }
+  
+  removeToolTip(){
+      if (this.element) {
+          this.element.remove();
+          this.element = null;
+          document.removeEventListener('pointermove', this.onPointerMove);
+        }
   }
   destroy() {
-    this.remove();
+    this.element = null;
+    document.removeEventListener('pointerover', this.onMouseOver);
+    document.removeEventListener('pointerout', this.onMouseOut);
+    this.removeToolTip();
   }
 }
 const tooltip = new Tooltip();

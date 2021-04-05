@@ -89,7 +89,6 @@ export default class SortableTable {
   sortData(field, order) {
     const arr = [...this.data];
     const column = this.header.find(item => item.id === field);
-    console.log(field);
     const { sortType } = column;
     const directions = {
       asc: 1,
